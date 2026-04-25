@@ -209,72 +209,30 @@
         }
       });
 
-      // --- MOCK CRUD OPERATIONS ---
-      // Stores menu data in browser LocalStorage for testing
-      let defaultMenuItems = [
-        { id: 1, name: 'Espresso (Voodoo Shot)', price: 120, category: 'Coffee', desc: 'A bold, concentrated ritual shot' },
-        { id: 2, name: 'Capuccino (Mystic Foam)', price: 175, category: 'Coffee', desc: 'Classic espresso with creamy foam' },
-        { id: 3, name: 'Latte (Spellbound Silk)', price: 180, category: 'Coffee', desc: 'Smooth espresso blended with velvety steamed milk' },
-        { id: 4, name: 'Americano (Dark Elixir)', price: 130, category: 'Coffee', desc: 'Espresso diluted with hot water for a rich but lighter sip' },
-        { id: 5, name: 'Macchiato (Sorcerer\'s Mark)', price: 190, category: 'Coffee', desc: 'Espresso topped with a milk mark' },
-        { id: 6, name: 'Flat White (Phantom White)', price: 180, category: 'Coffee', desc: 'Strong coffee with velvety microfoam' },
-        { id: 7, name: 'Mocha (Dragon Mocha)', price: 190, category: 'Coffee', desc: 'Chocolate and coffee, magically rich' },
-        { id: 8, name: 'Hot Chocolate (Hocus Cocoa)', price: 160, category: 'Coffee', desc: 'Creamy hot cocoa delight' },
-        { id: 9, name: 'Iced Americano (Iced Dark Elixir)', price: 170, category: 'Cold Coffee', desc: 'Chilled espresso with water' },
-        { id: 10, name: 'Iced Cappuccino (Frozen Mystic Foam)', price: 185, category: 'Cold Coffee', desc: 'Iced creamy, foamy coffee' },
-        { id: 11, name: 'Iced Latte (Iced Spellbound Silk)', price: 190, category: 'Cold Coffee', desc: 'Iced smooth milk coffee' },
-        { id: 12, name: 'Iced Mocha (Iced Dragon Mocha)', price: 210, category: 'Cold Coffee', desc: 'Iced chocolatey espresso blend' },
-        { id: 13, name: 'Cold Brew', price: 170, category: 'Cold Coffee', desc: 'Slow-brewed, ultra-smooth coffee' },
-        { id: 14, name: 'Lemon Grass Cold Brew', price: 210, category: 'Cold Coffee', desc: 'Refreshing cold brew with lemongrass' },
-        { id: 15, name: 'Peach Cold Brew', price: 210, category: 'Cold Coffee', desc: 'Cold brew with a sweet peach twist' },
-        { id: 16, name: 'Blackberry', price: 210, category: 'Kombucha', desc: 'Fruity fermented tea, blackberry twist' },
-        { id: 17, name: 'Cranberry', price: 210, category: 'Kombucha', desc: 'Zesty cranberry kombucha' },
-        { id: 18, name: 'Spiced Jamun', price: 210, category: 'Kombucha', desc: 'Indian berry kombucha with a hint of spice' },
-        { id: 19, name: 'Passion Fruit', price: 210, category: 'Kombucha', desc: 'Tangy passion fruit kombucha' },
-        { id: 20, name: 'Lemon Ice Tea', price: 140, category: 'Ice Tea & Shakes', desc: 'Chilled lemony black tea' },
-        { id: 21, name: 'Blueberry Ice Tea', price: 150, category: 'Ice Tea & Shakes', desc: 'A cooling blueberry iced tea offering a perfect balance of bold tea and berry sweetness.' },
-        { id: 22, name: 'Raspberry Ice Tea', price: 160, category: 'Ice Tea & Shakes', desc: 'A revitalizing raspberry iced tea offering a sweet, tangy, and cooling experience.' },
-        { id: 23, name: 'Peach Ice Tea', price: 150, category: 'Ice Tea & Shakes', desc: 'Light and refreshing peach iced tea crafted for a perfectly fruity sip.' },
-        { id: 24, name: 'Kaccha Aam Ice Tea', price: 140, category: 'Ice Tea & Shakes', desc: 'A lively iced tea with the sharp, mouthwatering punch of kaccha aam' },
-        { id: 25, name: 'Voodoo Mojito', price: 140, category: 'Ice Tea & Shakes', desc: '' },
-        { id: 26, name: 'Coco Almond Shake', price: 230, category: 'Ice Tea & Shakes', desc: '' },
-        { id: 27, name: 'Hazel Banana Shake', price: 240, category: 'Ice Tea & Shakes', desc: '' },
-        { id: 28, name: 'Tiramisu Almond Shake', price: 250, category: 'Ice Tea & Shakes', desc: '' },
-        { id: 29, name: 'Blueberry Charma Shake', price: 260, category: 'Ice Tea & Shakes', desc: '' },
-        { id: 30, name: 'New York Cheesecake', price: 240, category: 'Desserts', desc: 'Rich, creamy cake with biscuit crust' },
-        { id: 31, name: 'Biscoff Cheesecake', price: 260, category: 'Desserts', desc: 'Cheesecake infused with crunchy, spiced Biscoff cookie spread for unique flavor.' },
-        { id: 32, name: 'Biscoff Jar Cake', price: 260, category: 'Desserts', desc: 'Individual jar cake layered with Biscoff cookies, creamy cheesecake, and caramel.' },
-        { id: 33, name: 'Nutella Jar Cake', price: 230, category: 'Desserts', desc: 'Rich Nutella-flavored jar dessert with creamy layers and chocolatey goodness.' },
-        { id: 34, name: 'Nutella Cheese Cake', price: 260, category: 'Desserts', desc: 'Rich Nutella-flavored dessert with creamy layers and chocolatey goodness.' },
-        { id: 35, name: 'Tiramisu', price: 190, category: 'Desserts', desc: 'Traditional Italian dessert with espresso-soaked ladyfingers and mascarpone cream.' },
-        { id: 36, name: 'Blueberry Cheesecake', price: 260, category: 'Desserts', desc: 'Cream cheesecake bursting with tangy fresh blueberries and sweet crust.' },
-        { id: 37, name: 'Hot Chocolate Brownie', price: 260, category: 'Desserts', desc: 'Decadent hot chocolate brownie, served warm for the perfect cozy indulgence.' },
-        { id: 38, name: 'Banana Caramel Jar Cake', price: 260, category: 'Desserts', desc: 'Banana Caramel Jar Cake' },
-        { id: 39, name: 'Banana Hazelnut Tea Cake', price: 150, category: 'Bakery & Savouries', desc: 'Moist banana cake studded with crunchy hazelnuts, perfect for teatime.' },
-        { id: 40, name: 'Cinnamon Roll', price: 240, category: 'Bakery & Savouries', desc: 'Sweet, soft roll with cinnamon sugar and a luscious glaze.' },
-        { id: 41, name: 'Butter Croissant', price: 170, category: 'Bakery & Savouries', desc: 'Flaky, buttery croissant baked golden for a crisp, melt-in-your-mouth bite.' },
-        { id: 42, name: 'Chocolate Croissant', price: 190, category: 'Bakery & Savouries', desc: 'Buttery croissant filled with rich dark chocolate, perfect breakfast delight.' },
-        { id: 43, name: 'Plain Brownie', price: 130, category: 'Bakery & Savouries', desc: 'Classic fudgy brownie with a chewy center and crispy edges.' },
-        { id: 44, name: 'Biscoff Brownie', price: 170, category: 'Bakery & Savouries', desc: 'Decadent brownie mixed with spiced Biscoff cookie crumbs and caramel notes.' },
-        { id: 45, name: 'Walnut Fudge Brownie', price: 150, category: 'Bakery & Savouries', desc: 'Chewy fudge brownie loaded with crunchy walnuts for a rich texture.' },
-        { id: 46, name: 'Matcha & White Chocolate Cookie', price: 90, category: 'Bakery & Savouries', desc: 'Herbal matcha and sweet white chocolate' },
-        { id: 47, name: 'Dark Choco Chunk Cookie', price: 95, category: 'Bakery & Savouries', desc: 'Chewy cookie packed with bold, chunky dark chocolate pieces for a rich and satisfying treat' },
-        { id: 48, name: 'Caramel Cookie', price: 95, category: 'Bakery & Savouries', desc: 'Classic buttery cookie with caramel swirls baked in, delivering a rich and satisfying sweetness in every bite' },
-        { id: 49, name: 'Korean Bun', price: 210, category: 'Bakery & Savouries', desc: 'Soft, fluffy bun inspired by Korean bakery, lightly sweet and airy.' },
-        { id: 50, name: 'Avacado Toast (4pc)', price: 250, category: 'Bakery & Savouries', desc: 'Crispy toast topped with creamy smashed avocado and a hint of seasoning.' },
-        { id: 51, name: 'Paneer Tikka Sandwich', price: 240, category: 'Bakery & Savouries', desc: 'Classic buttery cookie with caramel swirls baked in, delivering a rich and satisfying sweetness in every bite' },
-        { id: 52, name: 'Croissant Sandwich', price: 250, category: 'Bakery & Savouries', desc: 'Buttery croissant stuffed with savory fillings to delight your palate.' },
-        { id: 53, name: 'Veg Mystic Burger', price: 200, category: 'Bakery & Savouries', desc: 'A rich, satisfying Veg Mystic Burger stacked with two crunchy tikkis and flavorful sauces.' },
-        { id: 54, name: 'Veg Croissant Burger', price: 200, category: 'Bakery & Savouries', desc: 'A premium veg burger crafted with a golden croissant bun and rich, fresh fillings.' },
-        { id: 55, name: 'Paneer Tikka Loaded Fries', price: 250, category: 'Bakery & Savouries', desc: 'Crispy fries loaded with spicy paneer tikka, creamy sauces, and vibrant Indian flavors.' }
-      ];
-      
-      let menuItems = JSON.parse(localStorage.getItem('cv_menu_items'));
-      
-      // Populate if empty or using old limited test data
-      if (!menuItems || menuItems.length < 50) {
-        menuItems = defaultMenuItems;
-        localStorage.setItem('cv_menu_items', JSON.stringify(menuItems));
+      // --- GOOGLE SHEETS API INTEGRATION ---
+      const API_URL = 'https://script.google.com/macros/s/AKfycbz9DIeu9BQSrQazo-buHXKLCtMFVOqJqqWvoScFXJpbHtxF5cRuJo-mhjgdd37uw1QV/exec';
+      let menuItems = [];
+
+      function showDashboard() {
+        document.getElementById('login-section').style.display = 'none';
+        document.getElementById('admin-dashboard').style.display = 'block';
+        loadData();
+      }
+
+      function loadData() {
+        const tbody = document.getElementById('menu-table-body');
+        tbody.innerHTML = '<tr><td colspan="5" class="text-center">Loading menu items from database...</td></tr>';
+        
+        fetch(API_URL)
+          .then(res => res.json())
+          .then(data => {
+            menuItems = data;
+            renderTable();
+          })
+          .catch(err => {
+            console.error(err);
+            tbody.innerHTML = '<tr><td colspan="5" class="text-center text-danger">Error loading data. Make sure API_URL is correct.</td></tr>';
+          });
       }
 
       function renderTable() {
@@ -309,7 +267,7 @@
       }
 
       function openEditModal(id) {
-        const item = menuItems.find(i => i.id === id);
+        const item = menuItems.find(i => parseInt(i.id) === parseInt(id));
         if (item) {
           document.getElementById('item-id').value = item.id;
           document.getElementById('item-name').value = item.name;
@@ -334,32 +292,44 @@
 
         if (idStr) {
           // Edit existing
-          const index = menuItems.findIndex(i => i.id === parseInt(idStr));
+          const index = menuItems.findIndex(i => parseInt(i.id) === parseInt(idStr));
           if (index !== -1) {
             menuItems[index] = { id: parseInt(idStr), name, price: parseInt(price), desc, category };
           }
         } else {
           // Add new
-          const newId = menuItems.length > 0 ? Math.max(...menuItems.map(i => i.id)) + 1 : 1;
+          const newId = menuItems.length > 0 ? Math.max(...menuItems.map(i => parseInt(i.id) || 0)) + 1 : 1;
           menuItems.push({ id: newId, name, price: parseInt(price), desc, category });
         }
 
-        saveData();
         $('#menuModal').modal('hide');
-        renderTable();
+        saveData();
       }
 
       function deleteItem(id) {
         if (confirm('Are you sure you want to delete this item?')) {
-          menuItems = menuItems.filter(i => i.id !== id);
+          menuItems = menuItems.filter(i => parseInt(i.id) !== parseInt(id));
           saveData();
-          renderTable();
         }
       }
 
       function saveData() {
-        localStorage.setItem('cv_menu_items', JSON.stringify(menuItems));
-        // TODO: In a real app, you would make an API call (fetch/axios) to a backend database here.
+        const tbody = document.getElementById('menu-table-body');
+        tbody.innerHTML = '<tr><td colspan="5" class="text-center">Saving changes to database...</td></tr>';
+        
+        fetch(API_URL, {
+          method: 'POST',
+          body: JSON.stringify(menuItems)
+        })
+        .then(res => res.json())
+        .then(res => {
+          renderTable();
+        })
+        .catch(err => {
+          console.error(err);
+          alert('Failed to save changes. Check console for details.');
+          renderTable();
+        });
       }
     </script>
   </body>

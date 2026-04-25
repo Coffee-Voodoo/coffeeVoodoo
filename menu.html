@@ -128,86 +128,76 @@ Our menu features freshly brewed coffee, specialty drinks, and locally sourced p
     
   <!-- Dynamic Menu Update Script -->
   <script>
+    const API_URL = 'YOUR_GOOGLE_SCRIPT_WEB_APP_URL';
+
     document.addEventListener('DOMContentLoaded', () => {
-      // 1. Default menu items matching your initial categories
-      const defaultMenu = [
-        { id: 1, name: 'Espresso (Voodoo Shot)', price: 120, category: 'Coffee', desc: 'A bold, concentrated ritual shot' },
-        { id: 2, name: 'Capuccino (Mystic Foam)', price: 175, category: 'Coffee', desc: 'Classic espresso with creamy foam' },
-        { id: 3, name: 'Latte (Spellbound Silk)', price: 180, category: 'Coffee', desc: 'Smooth espresso blended with velvety steamed milk' },
-        { id: 4, name: 'Iced Americano', price: 170, category: 'Cold Coffee', desc: 'Chilled espresso with water' },
-        { id: 5, name: 'Cold Brew', price: 170, category: 'Cold Coffee', desc: 'Slow-brewed, ultra-smooth coffee' },
-        { id: 6, name: 'Blackberry', price: 210, category: 'Kombucha', desc: 'Fruity fermented tea, blackberry twist' },
-        { id: 7, name: 'Lemon Ice Tea', price: 140, category: 'Ice Tea & Shakes', desc: 'Chilled lemony black tea' },
-        { id: 8, name: 'New York Cheesecake', price: 240, category: 'Desserts', desc: 'Rich, creamy cake with biscuit crust' },
-        { id: 9, name: 'Butter Croissant', price: 170, category: 'Bakery & Savouries', desc: 'Flaky, buttery croissant baked golden for a crisp, melt-in-your-mouth bite.' },
-        { id: 10, name: 'Paneer Tikka Sandwich', price: 240, category: 'Bakery & Savouries', desc: 'Classic buttery cookie with caramel swirls baked in.' }
-      ];
-
-      let menuItems = JSON.parse(localStorage.getItem('cv_menu_items'));
-      
-      // Seed local storage with default menu if empty
-      if (!menuItems || menuItems.length === 0) {
-          menuItems = defaultMenu;
-          localStorage.setItem('cv_menu_items', JSON.stringify(menuItems));
-      }
-
       const container = document.getElementById('dynamic-menu-container');
       if (!container) return;
       
-      container.innerHTML = '';
+      container.innerHTML = '<div class="col-12 text-center"><h4>Loading menu...</h4></div>';
 
-      // 2. Group items by category
-      const groupedMenu = menuItems.reduce((acc, item) => {
-          if (!acc[item.category]) acc[item.category] = [];
-          acc[item.category].push(item);
-          return acc;
-      }, {});
+      fetch(API_URL)
+        .then(res => res.json())
+        .then(menuItems => {
+            container.innerHTML = '';
+            if (!menuItems || menuItems.length === 0) {
+                container.innerHTML = '<div class="col-12 text-center"><h4>No menu items found.</h4></div>';
+                return;
+            }
+            
+            const groupedMenu = menuItems.reduce((acc, item) => {
+                if (!acc[item.category]) acc[item.category] = [];
+                acc[item.category].push(item);
+                return acc;
+            }, {});
 
-      // 3. Category image mapping to avoid broken image URLs
-      const categoryImages = {
-          'Coffee': 'images/coffee-1.jpg',
-          'Cold Coffee': 'images/cold-1.jpg',
-          'Kombucha': 'images/kombucha-1.jpg',
-          'Ice Tea & Shakes': 'images/ice-1.jpg',
-          'Desserts': 'images/dessert-1.jpg', 
-          'Bakery & Savouries': 'images/bakery-1.jpg'
-      };
+            const categoryImages = {
+                'Coffee': 'images/coffee-1.jpg',
+                'Cold Coffee': 'images/cold-1.jpg',
+                'Kombucha': 'images/kombucha-1.jpg',
+                'Ice Tea & Shakes': 'images/ice-1.jpg',
+                'Desserts': 'images/dessert-1.jpg', 
+                'Bakery & Savouries': 'images/bakery-1.jpg'
+            };
 
-      // 4. Render categories and their corresponding items
-      for (const [category, items] of Object.entries(groupedMenu)) {
-          const colDiv = document.createElement('div');
-          colDiv.className = 'col-md-6 mb-5 pb-3';
-          
-          // Map emojis to categories dynamically based on the category name
-          let catIcon = '☕';
-          if (category.includes('Cold')) catIcon = '🧊';
-          else if (category.includes('Kombucha')) catIcon = '🧃';
-          else if (category.includes('Ice Tea') || category.includes('Shakes')) catIcon = '🍹';
-          else if (category.includes('Dessert')) catIcon = '🍰';
-          else if (category.includes('Bakery') || category.includes('Savouries')) catIcon = '🧁';
+            for (const [category, items] of Object.entries(groupedMenu)) {
+                const colDiv = document.createElement('div');
+                colDiv.className = 'col-md-6 mb-5 pb-3';
+                
+                let catIcon = '☕';
+                if (category.includes('Cold')) catIcon = '🧊';
+                else if (category.includes('Kombucha')) catIcon = '🧃';
+                else if (category.includes('Ice Tea') || category.includes('Shakes')) catIcon = '🍹';
+                else if (category.includes('Dessert')) catIcon = '🍰';
+                else if (category.includes('Bakery') || category.includes('Savouries')) catIcon = '🧁';
 
-          let html = `<h3 class="mb-5 heading-pricing">${catIcon} ${category}</h3>`;
-          
-          items.forEach(item => {
-              const bgImg = categoryImages[category] || 'images/coffee-1.jpg';
-              html += `
-              <div class="pricing-entry d-flex">
-                <div class="img" style="background-image: url(${bgImg});"></div>
-                <div class="desc pl-3">
-                  <div class="d-flex text align-items-center">
-                    <h3><span>${item.name}</span></h3>
-                    <span class="price">₹${item.price}</span>
-                  </div>
-                  <div class="d-block">
-                    <p>${item.desc || ''}</p>
-                  </div>
-                </div>
-              </div>`;
-          });
-          
-          colDiv.innerHTML = html;
-          container.appendChild(colDiv);
-      }
+                let html = `<h3 class="mb-5 heading-pricing">${catIcon} ${category}</h3>`;
+                
+                items.forEach(item => {
+                    const bgImg = categoryImages[category] || 'images/coffee-1.jpg';
+                    html += `
+                    <div class="pricing-entry d-flex">
+                      <div class="img" style="background-image: url(${bgImg});"></div>
+                      <div class="desc pl-3">
+                        <div class="d-flex text align-items-center">
+                          <h3><span>${item.name}</span></h3>
+                          <span class="price">₹${item.price}</span>
+                        </div>
+                        <div class="d-block">
+                          <p>${item.desc || ''}</p>
+                        </div>
+                      </div>
+                    </div>`;
+                });
+                
+                colDiv.innerHTML = html;
+                container.appendChild(colDiv);
+            }
+        })
+        .catch(err => {
+            console.error("Failed to load menu:", err);
+            container.innerHTML = '<div class="col-12 text-center text-danger"><h4>Failed to load menu. Please try again later.</h4></div>';
+        });
     });
   </script>
   </body>
