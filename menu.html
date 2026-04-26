@@ -45,14 +45,21 @@
 		  </div>
 	  </nav>
     <!-- END nav -->
-<section class="ftco-section">
-  <div class="container">
-    <div class="row" id="dynamic-menu-container"></div>
-  </div>
-</section>
+    
+    <section class="ftco-section">
+      <div class="container">
+        <div class="row justify-content-center mb-5 pb-3">
+          <div class="col-md-7 heading-section ftco-animate text-center">
+            <span class="subheading">Discover</span>
+            <h2 class="mb-4">Our Menu</h2>
+          </div>
+        </div>
+        <div class="row" id="pdf-menu-container" style="height: 800px; width: 100%;">
+          <iframe id="menu-pdf-viewer" src="menuFiles/menu.pdf" width="100%" height="100%" style="border: none;"></iframe>
+        </div>
+      </div>
+    </section>
 
-
-</section>
 		<footer class="ftco-footer ftco-section img">
 			<div class="overlay"></div>
 		<div class="container">
@@ -126,78 +133,14 @@ Our menu features freshly brewed coffee, specialty drinks, and locally sourced p
   <script src="js/google-map.js"></script>
   <script src="js/main.js"></script>
     
-  <!-- Dynamic Menu Update Script -->
+  <!-- Cache buster for PDF -->
   <script>
-    const API_URL = 'https://script.google.com/macros/s/AKfycbz9DIeu9BQSrQazo-buHXKLCtMFVOqJqqWvoScFXJpbHtxF5cRuJo-mhjgdd37uw1QV/exec';
-
     document.addEventListener('DOMContentLoaded', () => {
-      const container = document.getElementById('dynamic-menu-container');
-      if (!container) return;
-      
-      container.innerHTML = '<div class="col-12 text-center"><h4>Loading menu...</h4></div>';
-
-      fetch(API_URL)
-        .then(res => res.json())
-        .then(menuItems => {
-            container.innerHTML = '';
-            if (!menuItems || menuItems.length === 0) {
-                container.innerHTML = '<div class="col-12 text-center"><h4>No menu items found.</h4></div>';
-                return;
-            }
-            
-            const groupedMenu = menuItems.reduce((acc, item) => {
-                if (!acc[item.category]) acc[item.category] = [];
-                acc[item.category].push(item);
-                return acc;
-            }, {});
-
-            const categoryImages = {
-                'Coffee': 'images/coffee-1.jpg',
-                'Cold Coffee': 'images/cold-1.jpg',
-                'Kombucha': 'images/kombucha-1.jpg',
-                'Ice Tea & Shakes': 'images/ice-1.jpg',
-                'Desserts': 'images/dessert-1.jpg', 
-                'Bakery & Savouries': 'images/bakery-1.jpg'
-            };
-
-            for (const [category, items] of Object.entries(groupedMenu)) {
-                const colDiv = document.createElement('div');
-                colDiv.className = 'col-md-6 mb-5 pb-3';
-                
-                let catIcon = '☕';
-                if (category.includes('Cold')) catIcon = '🧊';
-                else if (category.includes('Kombucha')) catIcon = '🧃';
-                else if (category.includes('Ice Tea') || category.includes('Shakes')) catIcon = '🍹';
-                else if (category.includes('Dessert')) catIcon = '🍰';
-                else if (category.includes('Bakery') || category.includes('Savouries')) catIcon = '🧁';
-
-                let html = `<h3 class="mb-5 heading-pricing">${catIcon} ${category}</h3>`;
-                
-                items.forEach(item => {
-                    const bgImg = categoryImages[category] || 'images/coffee-1.jpg';
-                    html += `
-                    <div class="pricing-entry d-flex">
-                      <div class="img" style="background-image: url(${bgImg});"></div>
-                      <div class="desc pl-3">
-                        <div class="d-flex text align-items-center">
-                          <h3><span>${item.name}</span></h3>
-                          <span class="price">₹${item.price}</span>
-                        </div>
-                        <div class="d-block">
-                          <p>${item.desc || ''}</p>
-                        </div>
-                      </div>
-                    </div>`;
-                });
-                
-                colDiv.innerHTML = html;
-                container.appendChild(colDiv);
-            }
-        })
-        .catch(err => {
-            console.error("Failed to load menu:", err);
-            container.innerHTML = '<div class="col-12 text-center text-danger"><h4>Failed to load menu. Please try again later.</h4></div>';
-        });
+      const iframe = document.getElementById('menu-pdf-viewer');
+      if (iframe) {
+        // Appends a timestamp to the URL to force the browser to fetch the newest uploaded version
+        iframe.src = 'menuFiles/menu.pdf?v=' + new Date().getTime();
+      }
     });
   </script>
   </body>
